@@ -1,0 +1,21 @@
+title: Windows User Account Created
+id: 8f2c6d91-7a43-4e5b-9c12-6d8a0f3b2e71
+status: experimental
+description: Detects creation of a Windows user account in the Security log.
+author: awolf11
+date: 2026/11/07
+references:
+  - https://attack.mitre.org/techniques/T1136/
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4720
+  condition: selection
+falsepositives:
+  - Legitimate account provisioning by administrators or approved automation
+level: medium
+tags:
+  - attack.persistence
+  - attack.t1136
