@@ -1,0 +1,316 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20261107112938
+Username: WIN-1FVGDH92F6Q\Administrator
+RunAs User: WIN-1FVGDH92F6Q\Administrator
+Configuration Name: 
+Machine: WIN-1FVGDH92F6Q (Microsoft Windows NT 10.0.20348.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+Process ID: 5956
+PSVersion: 5.1.20348.5756
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.20348.5756
+BuildVersion: 10.0.20348.5756
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is .\Desktop\windows-transcript.txt
+PS C:\Users\Administrator> Get-MpComputerStatus | Select-Object AMServiceEnabled, AntivirusEnabled, RealTimeProtectionEnabled, IsTamperProtected, AMEngineVersion, AntivirusSignatureLastUpdated
+
+
+AMServiceEnabled              : True
+AntivirusEnabled              : True
+RealTimeProtectionEnabled     : True
+IsTamperProtected             : False
+AMEngineVersion               : 1.1.26100.4
+AntivirusSignatureLastUpdated : 11/6/2026 9:55:22 AM
+
+
+
+PS C:\Users\Administrator> Get-MpComputerStatus | Select-Object AMServiceEnabled, AntivirusEnabled, RealTimeProtectionEnabled, IsTamperProtected, AMEngineVersion, AntivirusSignatureLastUpdated
+
+
+AMServiceEnabled              : True
+AntivirusEnabled              : True
+RealTimeProtectionEnabled     : True
+IsTamperProtected             : True
+AMEngineVersion               : 1.1.26100.4
+AntivirusSignatureLastUpdated : 11/6/2026 9:55:22 AM
+
+
+
+PS C:\Users\Administrator> Get-NetFirewallProfile
+
+
+Name                            : Domain
+Enabled                         : True
+DefaultInboundAction            : NotConfigured
+DefaultOutboundAction           : NotConfigured
+AllowInboundRules               : NotConfigured
+AllowLocalFirewallRules         : NotConfigured
+AllowLocalIPsecRules            : NotConfigured
+AllowUserApps                   : NotConfigured
+AllowUserPorts                  : NotConfigured
+AllowUnicastResponseToMulticast : NotConfigured
+NotifyOnListen                  : False
+EnableStealthModeForIPsec       : NotConfigured
+LogFileName                     : %systemroot%\system32\LogFiles\Firewall\pfirewall.log
+LogMaxSizeKilobytes             : 4096
+LogAllowed                      : False
+LogBlocked                      : False
+LogIgnored                      : NotConfigured
+DisabledInterfaceAliases        : {NotConfigured}
+
+Name                            : Private
+Enabled                         : True
+DefaultInboundAction            : NotConfigured
+DefaultOutboundAction           : NotConfigured
+AllowInboundRules               : NotConfigured
+AllowLocalFirewallRules         : NotConfigured
+AllowLocalIPsecRules            : NotConfigured
+AllowUserApps                   : NotConfigured
+AllowUserPorts                  : NotConfigured
+AllowUnicastResponseToMulticast : NotConfigured
+NotifyOnListen                  : False
+EnableStealthModeForIPsec       : NotConfigured
+LogFileName                     : %systemroot%\system32\LogFiles\Firewall\pfirewall.log
+LogMaxSizeKilobytes             : 4096
+LogAllowed                      : False
+LogBlocked                      : False
+LogIgnored                      : NotConfigured
+DisabledInterfaceAliases        : {NotConfigured}
+
+Name                            : Public
+Enabled                         : True
+DefaultInboundAction            : NotConfigured
+DefaultOutboundAction           : NotConfigured
+AllowInboundRules               : NotConfigured
+AllowLocalFirewallRules         : NotConfigured
+AllowLocalIPsecRules            : NotConfigured
+AllowUserApps                   : NotConfigured
+AllowUserPorts                  : NotConfigured
+AllowUnicastResponseToMulticast : NotConfigured
+NotifyOnListen                  : False
+EnableStealthModeForIPsec       : NotConfigured
+LogFileName                     : %systemroot%\system32\LogFiles\Firewall\pfirewall.log
+LogMaxSizeKilobytes             : 4096
+LogAllowed                      : False
+LogBlocked                      : False
+LogIgnored                      : NotConfigured
+DisabledInterfaceAliases        : {NotConfigured}
+
+
+
+PS C:\Users\Administrator> Get-SmbServerConfiguration | select EnableSMB1Protocol
+
+EnableSMB1Protocol
+------------------
+             False
+
+
+PS C:\Users\Administrator> auditpol /set /subcategory:"Process Creation" /success:enable /failure:enable
+The command was successfully executed.
+PS C:\Users\Administrator> reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit" `
+        /v ProcessCreationIncludeCmdLine_Enabled /t REG_DWORD /d 1 /f
+The operation completed successfully.
+PS C:\Users\Administrator> $sbl = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging"
+PS C:\Users\Administrator> if (-not (Test-Path $sbl)) { New-Item -Path $sbl -Force | Out-Null }
+PS C:\Users\Administrator> Set-ItemProperty -Path $sbl -Name EnableScriptBlockLogging -Value 1
+PS C:\Users\Administrator> $dest = "$env:USERPROFILE\Downloads\mifyrtm-win"
+PS C:\Users\Administrator> $dest = "$env:USERPROFILE\Downloads\midterm-win"
+PS C:\Users\Administrator> New-Item -ItemType Directory -Force -Path $dest | Out-Null
+PS C:\Users\Administrator> Invoke-WebRequest -Uri "https://download.sysinternals.com/files/Sysmon.zip"           -OutFile "$dest\Sysmon.zip"
+PS C:\Users\Administrator> Invoke-WebRequest -Uri "https://raw.githubusercontent.com/SwiftOnSecurity/sysmon-config/master/sysmonconfig-export.xml" -OutFile "$dest\sysmonconfig.xml"
+PS C:\Users\Administrator> Expand-Archive "$dest\Sysmon.zip" -DestinationPath $dest -Force
+PS C:\Users\Administrator> Set-Location $dest
+PS C:\Users\Administrator\Downloads\midterm-win> .\Sysmon64.exe -accepteula -i sysmonconfig.xml
+
+
+System Monitor v15.22 - System activity monitor
+By Mark Russinovich and Thomas Garnier
+Copyright (C) 2014-2026 Microsoft Corporation
+Using libxml2. libxml2 is Copyright (C) 1998-2012 Daniel Veillard. All Rights Reserved.
+Sysinternals - www.sysinternals.com
+
+Loading configuration file with schema version 4.50
+Sysmon schema version: 4.91
+Configuration file validated.
+The service Sysmon64 is already registered. Uninstall Sysmon before reinstalling.
+PS C:\Users\Administrator\Downloads\midterm-win> Get-Service Sysmon64
+
+Status   Name               DisplayName
+------   ----               -----------
+Running  Sysmon64           Sysmon64
+
+
+PS C:\Users\Administrator\Downloads\midterm-win> Start-Process -FilePath "powershell.exe" -Verb runAs -ArgumentList "-Command", "runas /user:BadUser1 cmd" -ErrorAction SilentlyContinue
+PS C:\Users\Administrator\Downloads\midterm-win> $cmd = 'Write-Host "Lab 3 - simulated encoded PowerShell activity"'
+PS C:\Users\Administrator\Downloads\midterm-win> $b64 = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($cmd))
+PS C:\Users\Administrator\Downloads\midterm-win> powershell.exe -EncodedCommand $b64
+Lab 3 - simulated encoded PowerShell activity
+PS C:\Users\Administrator\Downloads\midterm-win> $cmd = 'Write-Host "Midterm - simulated encoded PowerShell activity"'
+PS C:\Users\Administrator\Downloads\midterm-win> $b64 = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes($cmd))
+PS C:\Users\Administrator\Downloads\midterm-win> powershell.exe -EncodedCommand $b64
+Midterm - simulated encoded PowerShell activity
+PS C:\Users\Administrator\Downloads\midterm-win> net user midtermSuspect P@ssw0rd! /add
+The command completed successfully.
+PS C:\Users\Administrator\Downloads\midterm-win> net user midtermSuspect /delete
+The command completed successfully.
+PS C:\Users\Administrator\Downloads\midterm-win> Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624,4625,4688,4720} -MaxEvents 100 |
+  Select-Object TimeCreated, Id, @{n='Msg';e={ ($_.Message -split "`n")[0] }} | ConvertTo-Json -Depth 5 | Set-Content "$Home\Desktop\security-events.json"
+PS C:\Users\Administrator\Downloads\midterm-win> Add-MpPreference -ExclusionPath "D:\exmaplePythonApp"
+PS C:\Users\Administrator\Downloads\midterm-win> Get-MpPreference | Set-Content "$Home\Desktop\defender-exclusions.txt"
+PS C:\Users\Administrator\Downloads\midterm-win> Get-MpPreference | Select -ExpandProperty ExclusionPath | Set-Content "$Home\Desktop\defender-exclusions.txt"
+PS C:\Users\Administrator\Downloads\midterm-win> Get-MpPreference
+
+
+AiAgentNetworkInspection                              : 0
+AiAgentProtection                                     : 0
+AllowDatagramProcessingOnWinServer                    : False
+AllowNetworkProtectionDownLevel                       : False
+AllowNetworkProtectionOnWinServer                     : False
+AllowSwitchToAsyncInspection                          : True
+ApplyDisableNetworkScanningToIOAV                     : False
+AttackSurfaceReductionOnlyExclusions                  :
+AttackSurfaceReductionRules_Actions                   :
+AttackSurfaceReductionRules_Ids                       :
+AttackSurfaceReductionRules_RuleSpecificExclusions    :
+AttackSurfaceReductionRules_RuleSpecificExclusions_Id :
+BruteForceProtectionAggressiveness                    : 0
+BruteForceProtectionConfiguredState                   : 0
+BruteForceProtectionExclusions                        :
+BruteForceProtectionLocalNetworkBlocking              : False
+BruteForceProtectionMaxBlockTime                      : 0
+BruteForceProtectionSkipLearningPeriod                : False
+CheckForSignaturesBeforeRunningScan                   : False
+CloudBlockLevel                                       : 0
+CloudExtendedTimeout                                  : 0
+ComputerID                                            : DECAA1F7-33FA-463F-869E-052B068BF099
+ControlledFolderAccessAllowedApplications             :
+ControlledFolderAccessDefaultProtectedFolders         : {N/A: Controlled Folder Access is disabled}
+ControlledFolderAccessProtectedFolders                :
+DefinitionUpdatesChannel                              : 0
+DeploymentChannel                                     : 0
+DisableArchiveScanning                                : False
+DisableAutoExclusions                                 : False
+DisableBehaviorMonitoring                             : False
+DisableBlockAtFirstSeen                               : False
+DisableCacheMaintenance                               : False
+DisableCatchupFullScan                                : True
+DisableCatchupQuickScan                               : True
+DisableCoreServiceECSIntegration                      : False
+DisableCoreServiceTelemetry                           : False
+DisableCpuThrottleOnIdleScans                         : True
+DisableDatagramProcessing                             : False
+DisableDnsOverTcpParsing                              : False
+DisableDnsParsing                                     : False
+DisableEmailScanning                                  : True
+DisableFtpParsing                                     : False
+DisableGradualRelease                                 : False
+DisableHttpParsing                                    : False
+DisableInboundConnectionFiltering                     : False
+DisableIOAVProtection                                 : False
+DisableNetworkProtectionPerfTelemetry                 : False
+DisablePrivacyMode                                    : False
+DisableQuicParsing                                    : True
+DisableRdpParsing                                     : False
+DisableRealtimeMonitoring                             : False
+DisableRemovableDriveScanning                         : True
+DisableRestorePoint                                   : True
+DisableScanningMappedNetworkDrivesForFullScan         : True
+DisableScanningNetworkFiles                           : False
+DisableScriptScanning                                 : False
+DisableSmtpParsing                                    : False
+DisableSshParsing                                     : False
+DisableTamperProtection                               : False
+DisableTlsParsing                                     : False
+EnableControlledFolderAccess                          : 0
+EnableConvertWarnToBlock                              : False
+EnableDnsSinkhole                                     : True
+EnableFileHashComputation                             : False
+EnableFullScanOnBatteryPower                          : False
+EnableLowCpuPriority                                  : False
+EnableNetworkProtection                               : 0
+EnablePackageInspection                               : 0
+EnableUdpReceiveOffload                               : False
+EnableUdpSegmentationOffload                          : False
+EngineUpdatesChannel                                  : 0
+ExclusionExtension                                    :
+ExclusionIpAddress                                    :
+ExclusionPath                                         : {D:\exmaplePythonApp}
+ExclusionProcess                                      :
+ForceUseProxyOnly                                     : False
+HideExclusionsFromLocalUsers                          : True
+HighThreatDefaultAction                               : 0
+IntelTDTEnabled                                       : False
+LowThreatDefaultAction                                : 0
+MAPSReporting                                         : 2
+MeteredConnectionUpdates                              : False
+ModerateThreatDefaultAction                           : 0
+NetworkProtectionReputationMode                       : 0
+OobeEnableRtpAndSigUpdate                             : False
+PerformanceModeStatus                                 : 1
+PlatformUpdatesChannel                                : 0
+PromptEvidenceCollection                              : False
+ProxyBypass                                           :
+ProxyPacUrl                                           :
+ProxyServer                                           :
+PUAProtection                                         : 0
+QuarantinePurgeItemsAfterDelay                        : 90
+QuickScanIncludeExclusions                            : 0
+RandomizeScheduleTaskTimes                            : True
+RealTimeScanDirection                                 : 0
+RemediationScheduleDay                                : 0
+RemediationScheduleTime                               : 02:00:00
+RemoteEncryptionProtectionAggressiveness              : 0
+RemoteEncryptionProtectionConfiguredState             : 0
+RemoteEncryptionProtectionExclusions                  :
+RemoteEncryptionProtectionMaxBlockTime                : 0
+RemoveScanningThreadPoolCap                           : False
+ReportDynamicSignatureDroppedEvent                    : False
+ReportingAdditionalActionTimeOut                      : 10080
+ReportingCriticalFailureTimeOut                       : 10080
+ReportingNonCriticalTimeOut                           : 1440
+ScanAvgCPULoadFactor                                  : 50
+ScanOnlyIfIdleEnabled                                 : True
+ScanParameters                                        : 1
+ScanPurgeItemsAfterDelay                              : 15
+ScanScheduleDay                                       : 0
+ScanScheduleOffset                                    : 120
+ScanScheduleQuickScanTime                             : 00:00:00
+ScanScheduleTime                                      : 02:00:00
+SchedulerRandomizationTime                            : 4
+ServiceHealthReportInterval                           : 60
+SevereThreatDefaultAction                             : 0
+SharedSignaturesPath                                  :
+SharedSignaturesPathUpdateAtScheduledTimeOnly         : False
+SignatureAuGracePeriod                                : 0
+SignatureBlobFileSharesSources                        :
+SignatureBlobUpdateInterval                           : 60
+SignatureDefinitionUpdateFileSharesSources            :
+SignatureDisableUpdateOnStartupWithoutEngine          : False
+SignatureFallbackOrder                                : MicrosoftUpdateServer|MMPC
+SignatureFirstAuGracePeriod                           : 120
+SignatureScheduleDay                                  : 8
+SignatureScheduleTime                                 : 01:45:00
+SignatureUpdateCatchupInterval                        : 1
+SignatureUpdateInterval                               : 0
+SubmitSamplesConsent                                  : 1
+ThreatIDDefaultAction_Actions                         :
+ThreatIDDefaultAction_Ids                             :
+ThrottleForScheduledScanOnly                          : True
+TrustLabelProtectionStatus                            : 0
+UILockdown                                            : False
+UnknownThreatDefaultAction                            : 0
+PSComputerName                                        :
+
+
+
+PS C:\Users\Administrator\Downloads\midterm-win> Get-MpPreference | Out-File -FilePath "$Home\Desktop\defender-exclusions.txt"
+PS C:\Users\Administrator\Downloads\midterm-win> Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20261107114748
+**********************
